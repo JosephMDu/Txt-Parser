@@ -54,7 +54,7 @@ Extraction complete:
 
 ```bash
 pip install spacy
-python -m spacy download en_core_web_sm
+python -m spacy download en_core_web_lg
 ```
 
 2. Place `acme_defense.txt` in the same directory as `txt_parser.py`.
