@@ -1,32 +1,44 @@
 # txt_parser
 
-A Python script that extracts named entities from a plain text file and saves the results as JSON.
+A Python script that extracts named entities from a plain text file and saves the results as a structured JSON file.
 
-## What it does
+---
 
-Reads `acme_defense.txt`, runs it through a Named Entity Recognition (NER) model, and pulls out three entity types:
+## What It Does
 
-- **Company names** — tagged as `ORG` by the model
-- **Person names** — tagged as `PERSON`
-- **Dollar amounts / financial figures** — tagged as `MONEY`
+Reads `acme_defense.txt`, runs it through a Named Entity Recognition (NER) model, and extracts three entity types:
 
-Results are written to `extracted_info.json` and a short summary is printed to the console.
+| Entity Type | spaCy Label | Description |
+|---|---|---|
+| Company names | `ORG` | Organizations and companies |
+| Person names | `PERSON` | Individual people mentioned |
+| Dollar amounts | `MONEY` | Financial figures and currency amounts |
 
-## Extraction approach
+Results are written to `extracted_info.json` and a summary is printed to the console.
 
-Uses [spaCy](https://spacy.io/) with the `en_core_web_sm` model. spaCy was chosen because it handles NER out of the box without writing custom regex patterns, and `en_core_web_sm` is small and fast enough for short documents like this one. A pure regex approach would have been brittle for company and person names; spaCy's statistical model handles natural variation better.
+---
+
+## Extraction Approach
+
+Uses [spaCy](https://spacy.io/) with the `en_core_web_lg` model. spaCy was chosen because it handles NER out of the box without requiring custom regex patterns, and its statistical model handles natural variation in company and person names better than a rule-based approach would.
+
+The larger `en_core_web_lg` model is used over `en_core_web_sm` for improved accuracy. A manual exclusion list filters known false positives (e.g. `CFO`, `CUI`, `CMMC Level 2`) that the model incorrectly tags as organizations.
+
+---
 
 ## Input
 
-A plain text file named `acme_defense.txt` in the same directory as the script.
+A plain text file named `acme_defense.txt` placed in the same directory as the script.
+
+---
 
 ## Output
 
-`extracted_info.json` with this structure:
+**`extracted_info.json`** — structured extraction results:
 
 ```json
 {
-  "source_file": "acme_defense.txt",
+  "Source": "acme_defense.txt",
   "extracted_on": "2026-05-21",
   "entities": {
     "companies": [],
@@ -36,22 +48,24 @@ A plain text file named `acme_defense.txt` in the same directory as the script.
 }
 ```
 
-A console summary is also printed, for example:
+**Console summary:**
 
 ```
 Extraction complete:
-  Companies : 3
+  Companies : 2
   People    : 2
-  Amounts   : 1
+  Amounts   : 0
 ```
 
-## How to run
+---
+
+## How to Run
 
 1. Install dependencies:
 
 ```bash
 pip install spacy
-python -m spacy download en_core_web_sm
+python -m spacy download en_core_web_lg
 ```
 
 2. Place `acme_defense.txt` in the same directory as `txt_parser.py`.
@@ -62,9 +76,12 @@ python -m spacy download en_core_web_sm
 python txt_parser.py
 ```
 
+---
+
 ## Limitations
 
-- **Model accuracy is imperfect.** `en_core_web_sm` is a small general-purpose model. It may miss entities, mis-label them, or pick up false positives — especially for short or ambiguous names.
-- **No deduplication.** If the same company or person appears multiple times in the text, they will appear multiple times in the output list.
-- **MONEY label scope.** spaCy's `MONEY` label captures dollar amounts but may miss financial figures expressed without a currency symbol (e.g., "15 users" or percentages).
+- **Model accuracy is imperfect.** `en_core_web_lg` is a general-purpose model. It may miss entities, mis-label them, or produce false positives — especially for domain-specific acronyms and abbreviations.
+- **Manual exclusion list required.** Acronyms like `CFO`, `CUI`, and `CMMC Level 2` are blocked via a hardcoded list. Any new false positives must be added manually.
+- **No deduplication.** If the same entity appears multiple times in the text, it will appear multiple times in the output.
+- **MONEY label scope.** spaCy's `MONEY` label captures currency amounts but may miss figures expressed without a currency symbol (e.g. percentages or headcounts).
 - **Hardcoded filename.** The input file is hardcoded as `acme_defense.txt`. To use a different file, edit the `SOURCE_FILE` variable at the top of the script.
