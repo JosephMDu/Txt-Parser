@@ -1,15 +1,63 @@
 {
-  "source_file": "acme_defense.txt",
-  "extracted_on": "2026-05-21",
+  "source_file": "Transcript AWS Migration opportunity.docx",
+  "extracted_on": "2026-05-26",
   "entities": {
     "companies": [
-      "Acme Defense Components",
-      "Microsoft"
+      "HubSpot",
+      "Ace",
+      "SOC",
+      "VMware",
+      "Nexus Tech",
+      "Nexus Tech SE",
+      "Broadcom",
+      "the Migration Acceleration Program",
+      "TDCMX",
+      "TD Senex",
+      "Hyper-V",
+      "FinOps",
+      "Strawbridge Studios",
+      "AWS",
+      "Azure"
     ],
     "people": [
-      "Mark",
-      "Linda"
+      "Jordan Martin",
+      "Peter Newton",
+      "Greg Right",
+      "Chris Eames",
+      "Greg Mead",
+      "Thanarajoo",
+      "Jay",
+      "Luis",
+      "Chuck",
+      "Andy",
+      "Rick",
+      "Marie",
+      "Matt",
+      "Sam",
+      "Liz",
+      "Redmond"
     ],
-    "amounts": []
+    "amounts": [
+      "1 to 99 K",
+      "100,000",
+      "1,000",
+      "100K",
+      "50,000",
+      "under $100,000"
+    ]
+  },
+  "verification": {
+    "regex_amounts_found": [
+      "$100,000",
+      "$100,000",
+      "100K",
+      "$1,000",
+      "1 to 99 K",
+      "$50,000"
+    ],
+    "amounts_missed_by_spacy": [
+      "100K",
+      "1 to 99 K"
+    ]
   }
 }
